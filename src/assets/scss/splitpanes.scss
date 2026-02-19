@@ -1,0 +1,12 @@
+.splitpanes.default-theme {
+
+    .splitpanes__pane {
+      background-color: white !important;
+      transition: none !important;
+    }
+
+    .splitpanes__splitter {
+      min-width: 5px;
+    }
+  
+}

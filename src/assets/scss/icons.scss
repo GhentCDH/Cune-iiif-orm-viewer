@@ -1,0 +1,76 @@
+.ci {
+  display: inline-block;
+  line-height: 1;
+  speak: auto; // todo: check!
+
+  &:before {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    content: ' ';
+    background-size: 100%;
+  }
+
+  &.ci-md:before {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &.ci-lg:before {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  &.ci-layers:before {
+    background-image: url('@/assets/icons/layers.svg');
+  }
+
+  &.ci-layers-thin:before {
+    background-image: url('@/assets/icons/layers-thin.svg');
+  }
+
+  &.ci-cuneiform:before {
+    background-image: url('@/assets/icons/cuneiform.svg');
+  }
+
+  &.ci-info:before {
+    background-image: url('@/assets/icons/info.svg');
+  }
+
+  &.ci-polygon:before {
+    background-image: url('@/assets/icons/polygon.svg');
+  }
+
+  &.ci-translate:before {
+    background-image: url('@/assets/icons/translate.svg');
+  }
+
+  &.ci-text-left:before {
+    background-image: url('@/assets/icons/text-left.svg');
+  }
+
+  &.ci-rotate-left:before {
+    background-image: url('@/assets/icons/rotate_left.svg');
+  }
+
+  &.ci-rotate-right:before {
+    background-image: url('@/assets/icons/rotate_right.svg');
+  }
+
+  &.ci-share:before {
+    background-image: url('@/assets/icons/share.svg');
+  }
+
+}
+
+.pi {
+  &.pi-md:before {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &.pi-lg:before {
+    width: 2rem;
+    height: 2rem;
+  }
+}

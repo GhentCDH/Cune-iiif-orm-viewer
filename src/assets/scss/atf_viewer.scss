@@ -1,0 +1,19 @@
+.atf_part {
+
+  .atf_hovered {
+    color: var(--p-primary-900);
+    background-color: var(--p-primary-50);
+    border: none;
+  }
+
+  .atf_named_entity {
+    color: var(--p-primary-color) !important;
+    border-color: var(--p-primary-color) !important;
+  }
+
+  .atf_selected {
+    color: var(--p-primary-950);
+    background-color: var(--p-primary-100);
+  }
+
+}

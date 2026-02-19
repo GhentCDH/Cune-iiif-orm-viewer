@@ -1,0 +1,94 @@
+{
+  "name": "cune-iiif-orm-viewer",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/cune-iiif-orm-viewer.js",
+  "module": "./dist/cune-iiif-orm-viewer.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/cune-iiif-orm-viewer.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "scripts": {
+    "dev": "vite --config demo/vite.config.ts",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview --config demo/vite.config.ts",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build --force",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "peerDependencies": {
+    "@annotorious/annotorious": "^3.3.6",
+    "@annotorious/openseadragon": "^3.3.6",
+    "@iiif/helpers": "^1.5.7",
+    "@iiif/presentation-3": "^2.2.3",
+    "@iiif/presentation-3-normalized": "^0.9.7",
+    "@primevue/themes": "^4.2.4",
+    "@vueuse/core": "^10.11.1",
+    "dompurify": "^3.3.0",
+    "openseadragon": "^4.1.1",
+    "pinia": "^2.2.7",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.4",
+    "splitpanes": "^3.1.5",
+    "uuid": "^11.0.3",
+    "vue": "^3.5.13",
+    "vue-inline-svg": "^3.1.4"
+  },
+  "dependencies": {
+    "cune-iiif-orm-atf-utils": "github:GhentCDH/Cune-iiif-orm-ATF-utils"
+  },
+  "devDependencies": {
+    "@annotorious/annotorious": "^3.3.6",
+    "@annotorious/openseadragon": "^3.3.6",
+    "@iiif/helpers": "^1.5.7",
+    "@iiif/presentation-3": "^2.2.3",
+    "@iiif/presentation-3-normalized": "^0.9.7",
+    "@primevue/themes": "^4.2.4",
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^20.17.6",
+    "@types/openseadragon": "^4.1.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "@vueuse/components": "^10.11.1",
+    "@vueuse/core": "^10.11.1",
+    "autoprefixer": "^10.4.20",
+    "dompurify": "^3.3.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-vue": "^9.31.0",
+    "npm-run-all2": "^6.2.6",
+    "openseadragon": "^4.1.1",
+    "pinia": "^2.2.7",
+    "postcss": "^8.4.49",
+    "postcss-import": "^16.1.0",
+    "prettier": "^3.4.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.4",
+    "sass": "^1.94.2",
+    "splitpanes": "^3.1.5",
+    "tailwindcss": "^3.4.15",
+    "tailwindcss-primeui": "^0.3.4",
+    "typescript": "~5.4.5",
+    "uuid": "^11.0.3",
+    "vite": "^5.4.11",
+    "vite-plugin-dts": "^3",
+    "vue": "^3.5.13",
+    "vue-inline-svg": "^3.1.4",
+    "vue-tsc": "^2.1.10"
+  },
+  "packageManager": "pnpm@9.13.2+sha512.88c9c3864450350e65a33587ab801acf946d7c814ed1134da4a924f6df5a2120fd36b46aab68f7cd1d413149112d53c7db3a4136624cfd00ff1846a0c6cef48a"
+}
