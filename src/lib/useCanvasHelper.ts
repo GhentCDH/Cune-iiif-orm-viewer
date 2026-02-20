@@ -1,33 +1,35 @@
 import {createPaintingAnnotationsHelper, Vault} from "@iiif/helpers";
+import type { AnnotationBody } from '@iiif/presentation-3'
+import { ensureArray } from '@/lib/ArrayHelper.ts'
 
 export const useCanvasHelper = (vault: Vault) => {
 
     const { getPaintables, getAllPaintingAnnotations, extractChoices } = createPaintingAnnotationsHelper(vault)
 
     const getAllImages = (canvasId: string): string[] => {
-        const paintables = getPaintables(canvasId)
+      const paintables = getPaintables(canvasId)
 
-        const imageResources: string[] = []
+      const imageResources = new Set<string>()
 
-        for (const { annotation} of paintables.items) {
-            const body = annotation.body ? Array.isArray(annotation.body) ? annotation.body : [annotation.body] : []
-            for (const b of body) {
-                const bodyObject = vault.getObject(body)[0]
-                if (bodyObject.type === 'Image') {
-                    imageResources.push(bodyObject.id)
-                }
-            }
+      // Extract image resources from choices if they exist
+      if (paintables.choice) {
+        if (paintables.choice.type === 'single-choice') {
+          for (const choice of paintables.choice.items) {
+            imageResources.add(choice.id)
+          }
         }
+      }
 
-        if (paintables.choice) {
-            if (paintables.choice.type === 'single-choice') {
-                for (const choice of paintables.choice.items) {
-                    imageResources.push(choice.id)
-                }
-            }
+      // Walk through paintables and extract image resources
+      for (const paintable of paintables.items) {
+        if (!paintable.resource) continue
+        if (paintable.type !== 'image') continue
+        if (paintable.resource.id) {
+          imageResources.add(paintable.resource.id)
         }
+      }
 
-        return imageResources
+      return Array.from(imageResources)
     }
 
     const getChoices = (canvasId: string) => {

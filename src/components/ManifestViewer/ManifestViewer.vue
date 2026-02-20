@@ -2,7 +2,9 @@
 import { computed, reactive, ref, toRefs, watch } from 'vue'
 
 // stores
-import { useViewerState, type ViewerPanelStateList } from '@/stores/viewerState'
+import { useViewerState } from '@/stores/viewerState'
+
+import type { ViewerPanelStateList } from './types'
 
 import { Splitpanes, Pane } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
@@ -16,9 +18,9 @@ import ImagePanel from '@/components/ManifestViewer/panels/image/ImagePanel.vue'
 import LayersPanel from '@/components/ManifestViewer/panels/layers/LayersPanel.vue'
 import DataSetsPanel from '@/components/ManifestViewer/panels/datasets/DataSetsPanel.vue'
 import SidebarToggle from '@/components/ManifestViewer/ui/SidebarToggle.vue'
-import type { ViewerPanel, ViewerProps } from '@/components/ManifestViewer/types'
+import type { ViewerPanel, ManifestViewerProps } from '@/components/ManifestViewer/types'
 
-const props = withDefaults(defineProps<ViewerProps>(), {
+const props = withDefaults(defineProps<ManifestViewerProps>(), {
   verbose: false
 })
 

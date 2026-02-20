@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, toRefs, watch } from 'vue'
-import type { AnnotationNormalized } from '@iiif/presentation-3-normalized'
 
 import { type ImageViewerProps } from '@/components/ImageViewer/types'
 
@@ -17,8 +16,9 @@ import type {
   W3CImageAnnotation
 } from '@annotorious/openseadragon'
 import type { DrawingStyle } from '@annotorious/annotorious'
+import type { Annotation } from '@iiif/presentation-3'
 
-type AnnotationNormalizedMap = Map<string, AnnotationNormalized>
+type AnnotationMap = Map<string, Annotation>
 
 // event configuration
 const emit = defineEmits<{
@@ -70,6 +70,7 @@ const osdOptions: OpenSeadragonOptions = {
   showFlipControl: false,
   showRotationControl: false,
   animationTime: 0.2,
+  // @ts-ignore
   silenceMultiImageWarnings: true
 }
 
@@ -82,9 +83,9 @@ const {
   hoveredAnnotationIds
 } = toRefs(props)
 
-const annotationsMap = computed<AnnotationNormalizedMap>(() => {
-  const map: AnnotationNormalizedMap = new Map()
-  annotations.value.forEach((anno: AnnotationNormalized) => {
+const annotationsMap = computed<AnnotationMap>(() => {
+  const map: AnnotationMap = new Map()
+  annotations.value.forEach((anno: Annotation) => {
     map.set(anno.id, anno)
   })
   return map
@@ -145,8 +146,8 @@ const initEvents = () => {
   })
 }
 
-const getAnnotation = (id: string): AnnotationNormalized => {
-  return annotationsMap.value.get(id) as AnnotationNormalized
+const getAnnotation = (id: string): Annotation => {
+  return annotationsMap.value.get(id) as Annotation
 }
 
 /* styling */
@@ -158,7 +159,7 @@ const convertStyle = (style: any) => {
   }
 }
 
-const getAnnotationStyle = (anno: AnnotationNormalized) => {
+const getAnnotationStyle = (anno: Annotation) => {
   const signIsHovered = hoveredAnnotationIds.value.includes(anno.id)
   if (!showAnnotations.value && !signIsHovered) return { opacity: 0 }
 
@@ -180,7 +181,7 @@ const annotationStyler = (
   anno: ImageAnnotation,
   state?: AnnotationState | undefined
 ): DrawingStyle => {
-  return convertStyle(getAnnotationStyle(getAnnotation(anno.id) as AnnotationNormalized))
+  return convertStyle(getAnnotationStyle(getAnnotation(anno.id) as Annotation))
 }
 
 const updateAnnotationStyles = (annotationIds?: string[]) => {

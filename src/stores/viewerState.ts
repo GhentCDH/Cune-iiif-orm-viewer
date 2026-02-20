@@ -5,11 +5,8 @@ import { useVault } from '@/lib/useVault.ts'
 import { useCanvasHelper } from '@/lib/useCanvasHelper.ts'
 import { getFirstLocalizedValue } from '@/lib/LocalizationHelper'
 import { useImageHelper } from '@/lib/useImageHelper.ts'
-import type {
-  AnnotationNormalized,
-  CanvasNormalized,
-  ManifestNormalized
-} from '@iiif/presentation-3-normalized'
+
+import type { Canvas, Manifest, Annotation } from '@iiif/presentation-3'
 import { useAnnotationHelper } from '@/lib/useAnnotationHelper.ts'
 import type {
   Layer,
@@ -47,7 +44,7 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
   // resource state
   const manifestId = ref<string | null>(null)
   const canvasId = ref<string | null>(null)
-  const manifest: Ref<ManifestNormalized|null> = ref(null)
+  const manifest: Ref<Manifest|null> = ref(null)
 
   const manifestLoaded = ref(false)
 
@@ -77,8 +74,10 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
 
   // viewport state
   const viewPort = ref<Viewport>({
-    x: null,
-    y: null,
+    center: {
+      x: null,
+      y: null,
+    },
     zoom: 1,
     rotation: 0
   })
@@ -116,13 +115,14 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
     layerPreset.value = LayerPreset.Combined
   })
 
-  const canvas: ComputedRef<CanvasNormalized | null> = computed(() => {
+  const canvas: ComputedRef<Canvas | null> = computed(() => {
     if (!canvasId.value) return null
-    return vault.getObject(canvasId.value) as CanvasNormalized
+    console.log(vault.getObject(canvasId.value))
+    return vault.getObject(canvasId.value) as Canvas
   })
 
   // Annotations - use ref + watch for async loading
-  const annotations = ref<AnnotationNormalized[]>([])
+  const annotations = ref<Annotation[]>([])
   const annotationsLoading = ref(false)
 
   // Watch canvasId to load annotations
@@ -226,8 +226,7 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
   }
 
   function setCenter(x: number, y: number) {
-    viewPort.value.x = x
-    viewPort.value.y = y
+    viewPort.value.center = {x, y}
   }
 
   function setLayerPreset(preset: LayerPreset) {
@@ -294,7 +293,7 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
         throw new Error('Manifest could not be loaded')
       }
       manifestId.value = id
-      manifest.value = manifestObject as ManifestNormalized
+      manifest.value = manifestObject as Manifest
 
       const canvasIds = manifestObject.items.map(item => item.id)
       if (canvasIds.length === 0) {

@@ -23,7 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/panels/ViewerPanel.vue'
+import ViewerPanel, {
+  type ViewerPanelProps
+} from '@/components/ManifestViewer/panels/ViewerPanel.vue'
 import { useViewerState } from '@/stores/viewerState'
 import { useNamedEntityStore } from '@/stores/namedEntityStore'
 
@@ -35,7 +37,14 @@ import { ATFSignSelector } from 'cune-iiif-orm-atf-utils/src/lib/ATFSignSelector
 import type { ATFItem } from 'cune-iiif-orm-atf-utils/src'
 import { type Sign, SignSelector } from '@/lib/SignSelector'
 import { ensureArray } from '@/lib/ArrayHelper'
-import type { AnnotationNormalized } from '@iiif/presentation-3-normalized'
+import type { Annotation } from '@iiif/presentation-3'
+
+type AnnotationBody = {
+  type: string
+  value: string | object | Array<string | object>
+  format?: string
+  purpose?: string
+}
 
 // props
 const props = defineProps<ViewerPanelProps>()
@@ -51,19 +60,33 @@ const transliterations = computed((): Array<string> => {
   if (!viewerState.hasAnnotations) {
     return []
   }
-  const ret = []
-  viewerState.annotations.filter(a => {
-    const body = Array.isArray(a.body) ? a.body : [a.body]
-    return Array.isArray(a.motivation) && a.motivation.includes("describing")
-      && body.some(b => b.purpose === 'transliterating' && b.format==='text/x-atf' && b.type==='TextualBody')
-  }).forEach(a => {
-    const body = ensureArray(a.body).find(
-      b => b.purpose === 'transliterating' && b.format==='text/x-atf' && b.type==='TextualBody'
-    )
-    if (body && 'value' in body) {
-      ret.push(body.value)
-    }
-  })
+  const ret: string[] = []
+  viewerState.annotations
+    .filter((a: any) => {
+      const body = ensureArray(a.body) as AnnotationBody[]
+      return (
+        Array.isArray(a.motivation) &&
+        a.motivation.includes('describing') &&
+        (body as any[]).some(
+          (b: any) =>
+            b.purpose === 'transliterating' && b.format === 'text/x-atf' && b.type === 'TextualBody'
+        )
+      )
+    })
+    .forEach((a: any) => {
+      const body = (ensureArray(a.body) as AnnotationBody[]).find(
+        (b) =>
+          'purpose' in b &&
+          b.purpose === 'transliterating' &&
+          'format' in b &&
+          b.format === 'text/x-atf' &&
+          'type' in b &&
+          b.type === 'TextualBody'
+      )
+      if (body && 'value' in body) {
+        ret.push(body.value as string)
+      }
+    })
   return ret
 })
 
@@ -71,10 +94,10 @@ const hasTransliterations = computed((): boolean => {
   return transliterations.value.length > 0
 })
 
-const createSign = (anno: AnnotationNormalized): Sign => {
+const createSign = (anno: Annotation): Sign => {
   const bodies = ensureArray(anno.body)
 
-  let text = bodies.find((item) => item?.purpose === 'transliterating')?.value
+  let text = (bodies as any[]).find((item: any) => item?.purpose === 'transliterating')?.value
   let position: any = bodies.find((item: any) => item?.type === 'SignPosition')
 
   return {
@@ -89,30 +112,23 @@ const createSign = (anno: AnnotationNormalized): Sign => {
 // create signs from annotations
 const signMap = computed((): Map<string, Sign> => {
   const ret = new Map<string, Sign>()
-  viewerState.annotations.forEach((anno) => {
+  viewerState.annotations.forEach((anno: Annotation) => {
     const sign = createSign(anno)
     ret.set(anno.id, sign)
   })
   return ret
 })
 
-
 // state
 const hoveredATFSigns: ComputedRef<ATFSignSelector[]> = computed(() => {
-
   const selectors = Array<ATFSignSelector>()
 
   // console.log('** hoveredATFSigns update', viewerState.hoveredSigns)
-  viewerState.hoveredAnnotationIds.forEach((annoId) => {
+  viewerState.hoveredAnnotationIds.forEach((annoId: string) => {
     const sign = signMap.value.get(annoId)
     if (!sign) return null
 
-    const selector = new ATFSignSelector(
-      sign.side,
-      sign.lineIndex,
-      sign.charIndex,
-      null
-    )
+    const selector = new ATFSignSelector(sign.side, sign.lineIndex, sign.charIndex, undefined)
     selectors.push(selector)
   })
 
@@ -121,7 +137,7 @@ const hoveredATFSigns: ComputedRef<ATFSignSelector[]> = computed(() => {
 })
 
 // methods
-const fixNewlines = (text: string): string => text.replace(/\r\n/g, "\n")
+const fixNewlines = (text: string): string => text.replace(/\r\n/g, '\n')
 
 // events
 const onTokenized = (elements: Array<ATFElement>) => {
@@ -130,7 +146,13 @@ const onTokenized = (elements: Array<ATFElement>) => {
 
 const onMouseOver = (atfItem: ATFItem) => {
   const signSelectors = atfItem.signs.map(
-    (sign) => new SignSelector(sign.partName, sign.lineNumber, null, sign.signNumber)
+    (sign) =>
+      new SignSelector(
+        sign.partName as 'obverse' | 'reverse' | 'top' | 'bottom',
+        sign.lineNumber,
+        null,
+        sign.signNumber
+      )
   )
 
   const annotationIds = new Set<string>()

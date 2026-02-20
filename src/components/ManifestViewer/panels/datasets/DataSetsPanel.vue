@@ -1,7 +1,7 @@
 <template>
   <ViewerPanel v-bind="props" scrollable>
     <h2>Images</h2>
-    <ul class="list-inside list-disc  mb-2">
+    <ul class="list-inside list-disc mb-2">
       <li v-for="(resource, index) in formatImageResources" :key="index">
         <a target="_blank" :href="resource.uri">{{ resource.label }}</a>
       </li>
@@ -21,15 +21,15 @@ import { useViewerState } from '@/stores/viewerState'
 import type { DataSource } from './types'
 import { useVault } from '@/lib/useVault.ts'
 
-import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/panels/ViewerPanel.vue'
-import { useLocalizationHelper } from '@/lib/useLocalizationHelper.ts'
+import ViewerPanel, {
+  type ViewerPanelProps
+} from '@/components/ManifestViewer/panels/ViewerPanel.vue'
+import { getLocalizedValue } from '@/lib/LocalizationHelper.ts'
 
 const props = defineProps<ViewerPanelProps>()
 
 const viewerState = useViewerState(props.viewerStateId)
 const vault = useVault()
-
-const { getFirstLocalizedValue } = useLocalizationHelper()
 
 // Initialize on mount in case manifest is already loaded
 onMounted(() => {
@@ -37,9 +37,12 @@ onMounted(() => {
 })
 
 // Watch for manifest to be loaded
-watch(() => viewerState.manifestLoaded, (loaded) => {
-  // initState()
-})
+watch(
+  () => viewerState.manifestLoaded,
+  (loaded) => {
+    // initState()
+  }
+)
 
 const resetState = () => {
   viewerState.disablePanel(props.panelId)
@@ -48,15 +51,22 @@ const resetState = () => {
 const formatSeeAlso = computed((): DataSource[] => {
   if (!viewerState.manifestLoaded) return []
 
-  if (!viewerState.manifest || !('seeAlso' in viewerState.manifest) || !viewerState.manifest.seeAlso || viewerState.manifest.seeAlso.length === 0) return []
+  if (
+    !viewerState.manifest ||
+    !('seeAlso' in viewerState.manifest) ||
+    !viewerState.manifest.seeAlso ||
+    viewerState.manifest.seeAlso.length === 0
+  )
+    return []
 
   const results: DataSource[] = []
   for (const entry of viewerState.manifest.seeAlso) {
     if ('id' in entry) {
-      const label = getFirstLocalizedValue(entry?.['label'], toValue(viewerState.language), 'Untitled')
+      const label =
+        getLocalizedValue(entry?.['label'], toValue(viewerState.language), 'Untitled') ?? ''
       results.push({
         uri: entry['id'],
-        label,
+        label
       })
     }
   }
@@ -71,10 +81,11 @@ const formatImageResources = computed((): DataSource[] => {
     const imageResource = vault.getObject(imageId)
     if (!imageResource) continue
     if ('id' in imageResource) {
-      const label = getFirstLocalizedValue(imageResource['label'], toValue(imageResource['label'], 'Untitled'))
+      const label =
+        getLocalizedValue(imageResource['label'], toValue(viewerState.language), 'Untitled') ?? ''
       results.push({
         uri: imageResource['id'],
-        label,
+        label
       })
     }
   }

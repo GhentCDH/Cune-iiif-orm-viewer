@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
 import { useVault } from '@/lib/useVault.ts'
+import type { Layer } from '@/components/ManifestViewer/types'
 
 import Slider from 'primevue/slider'
 import Label from '@/components/ManifestViewer/ui/Label.vue'
@@ -40,8 +41,7 @@ import ToggleIcon from '@/components/helpers/ToggleIcon.vue'
 
 const vault = useVault()
 
-const layers = defineModel({
-  type: Array,
+const layers = defineModel<Layer[]>({
   default: []
 })
 

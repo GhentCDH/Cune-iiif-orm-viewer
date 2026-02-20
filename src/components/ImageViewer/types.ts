@@ -1,8 +1,8 @@
-import type { AnnotationNormalized } from '@iiif/presentation-3-normalized'
 import type { TiledImageOptions } from 'openseadragon'
+import type { Annotation } from '@iiif/presentation-3'
 
 export interface ImageViewerProps {
-  annotations: AnnotationNormalized[],
+  annotations: Annotation[],
   tileSources: TiledImageOptions[],
   annotationStyle?: AnnotationStyle
   hoveredAnnotationIds?: string[]
