@@ -58,6 +58,9 @@ import type { ViewerPanelProps } from '@/components/ManifestViewer/panels/Viewer
 import type { TiledImageOptions } from 'openseadragon'
 import { useVault } from '@/lib/useVault.ts'
 import { useImageHelper } from '@/lib/useImageHelper.ts'
+import type { Layer } from '@/components/ManifestViewer/types.ts'
+
+type TiledImageOptionsWithId = TiledImageOptions & { id?: string }
 
 // props
 const props = defineProps<ViewerPanelProps>()
@@ -90,7 +93,7 @@ const annotationStyle = ref({
   }
 })
 
-const tileSources = ref<TiledImageOptions[]>([])
+const tileSources = ref<TiledImageOptionsWithId[]>([])
 
 const initPanel = () => {
   tileSources.value = generateTileSources()
@@ -109,16 +112,16 @@ onMounted(() => {
   initPanel()
 })
 
-const generateTileSources = (): TiledImageOptions[] => {
+const generateTileSources = (): TiledImageOptionsWithId[] => {
   if (!viewerState.canvas || !viewerState.images.length) {
     return []
   }
 
-  const ret: TiledImageOptions[] = []
+  const ret: TiledImageOptionsWithId[] = []
 
   // layers? use layers to build tile sources with opacity
   if (viewerState.hasLayers) {
-    viewerState.layers.forEach((layer, index) => {
+    viewerState.layers.forEach((layer: Layer, index: number) => {
       const imageResource = getImageResource(layer.id)
       if (!imageResource) {
         console.warn(`Image resource not found for layer id: ${layer.id}`)
@@ -141,7 +144,7 @@ const generateTileSources = (): TiledImageOptions[] => {
   }
 
   // no layers? use viewerState.images with full opacity
-  viewerState.images.forEach((imageId, index) => {
+  viewerState.images.forEach((imageId: string, index: number) => {
     const imageResource = getImageResource(imageId)
     if (!imageResource) {
       console.warn(`Image resource not found for imageId: ${imageId}`)
@@ -168,8 +171,8 @@ watch(
   () => viewerState.layers,
   () => {
     // update tile sources opacity based on layer settings
-    tileSources.value.forEach((tileSource: TiledImageOptions) => {
-      const layer = viewerState.layers.find((l) => l.id === tileSource.id)
+    tileSources.value.forEach((tileSource: TiledImageOptionsWithId) => {
+      const layer = viewerState.layers.find((l: Layer) => l.id === tileSource.id)
       tileSource.opacity = layer?.enabled ? (layer.opacity ?? 1) : 0
     })
   },

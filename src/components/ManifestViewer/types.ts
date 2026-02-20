@@ -1,4 +1,4 @@
-export interface ViewerProps {
+export interface ManifestViewerProps {
   verbose: boolean,
   manifestId: string,
   viewerStateId?: string

@@ -1,4 +1,5 @@
-import { getValue } from '@iiif/helpers'
+import { getClosestLanguage, getValue } from '@iiif/helpers'
+import { ensureArray } from '@/lib/ArrayHelper.ts'
 
 /**
  * IIIF Localized value type
@@ -48,11 +49,34 @@ export function getLocalizedValue(
 
   // Use IIIF helpers getValue function which handles language selection
   // It automatically picks the best language match
-  const result = getValue(localizedValue, preferredLanguage)
+  const result = getValue(localizedValue, { language: preferredLanguage })
 
   // getValue returns the value or empty string, use our fallback if empty
   return result || fallback
 }
+
+export function getLocalizedValues(
+  localizedValue: LocalizedValue,
+  preferredLanguage: string = 'en',
+  fallback: string = ''
+): string[] | undefined {
+  // Handle null/undefined
+  if (!localizedValue) {
+    return [fallback]
+  }
+
+  // Handle empty object
+  if (Object.keys(localizedValue).length === 0) {
+    return [fallback]
+  }
+
+  const lang = getClosestLanguage(preferredLanguage, Object.keys(localizedValue))
+  if (!lang) {
+    return undefined
+  }
+  return localizedValue?.[lang] ? ensureArray(localizedValue[lang]) : [fallback]
+}
+
 
 /**
  * Get the first available value from a localized object, ignoring language preference.

@@ -1,12 +1,12 @@
 import {Vault, expandTarget} from "@iiif/helpers";
-import type {AnnotationPage} from "@iiif/presentation-3";
-import type {AnnotationNormalized} from "@iiif/presentation-3-normalized";
+import type {AnnotationPage, Annotation} from "@iiif/presentation-3";
 import { ensureArray } from '@/lib/ArrayHelper.ts'
 
+// @ts-ignore
 export const useAnnotationHelper = (vault: Vault) => {
 
     const getCanvasAnnotations = async (canvasId: string)  => {
-        const annotations: AnnotationNormalized[] = []
+        const annotations: Annotation[] = []
 
         const canvas = vault.getObject(canvasId)
         if (!canvas) return annotations
@@ -18,17 +18,17 @@ export const useAnnotationHelper = (vault: Vault) => {
 
                 // walk annotations
                 const annotationPage = await vault.loadObject<AnnotationPage>(annotationPageRef.id)
-                if (annotationPage && 'items' in annotationPage) {
+                if (annotationPage && 'items' in annotationPage && Array.isArray(annotationPage.items)) {
                     for (const annotationRef of annotationPage.items) {
-                        const annotationNormalized = vault.getObject(annotationRef)
-                        const targets = ensureArray(annotationNormalized.target)
+                        const annotation = vault.getObject(annotationRef) as Annotation
+                        const targets = ensureArray(annotation.target)
                         const matchingTargets = getMatchingTargets(canvasId, targets)
                         if (matchingTargets.length === 0) {
                             console.warn(`Annotation ${annotationRef.id} does not target canvas ${canvasId}, skipping.`)
                             continue
                         }
                         // add annotation id to list
-                        annotations.push(annotationNormalized)
+                        annotations.push(annotation)
                     }
                 }
             }
@@ -64,7 +64,6 @@ export const useAnnotationHelper = (vault: Vault) => {
         isTargetMatchingSource,
         getMatchingTargets,
     }
-
 
 }
 

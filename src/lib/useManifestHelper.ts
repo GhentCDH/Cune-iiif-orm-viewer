@@ -1,14 +1,14 @@
-import { useLocalizationHelper } from '@/lib/useLocalizationHelper.ts'
+import { getLocalizedValue, getLocalizedValues } from '@/lib/LocalizationHelper'
+
 import type { Vault } from '@iiif/helpers/vault'
 
 export type LocalizedMetadataEntry = {
     label: string;
-    value: Array<string> | string;
+    value: Array<string>;
 }
 
 export type LocalizedMetadata = LocalizedMetadataEntry[]
 
-const { getFirstLocalizedValue, getLocalizedValues } = useLocalizationHelper()
 
 export const useManifestHelper = (vault: Vault) => {
 
@@ -22,7 +22,7 @@ export const useManifestHelper = (vault: Vault) => {
         const result: LocalizedMetadata = []
         if (!metadata) return result
         for (const entry of metadata) {
-            const label = getFirstLocalizedValue(entry['label'], language)
+            const label = getLocalizedValue(entry['label'], language)
             const value = getLocalizedValues(entry['value'], language)
             if (label && value) {
                 result.push({ label, value })
