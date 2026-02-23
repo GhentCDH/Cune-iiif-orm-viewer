@@ -1,5 +1,5 @@
 {
-  "name": "cune-iiif-orm-viewer",
+  "name": "@ghentcdh/cune-iiif-orm-viewer",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/cune-iiif-orm-viewer.js",
