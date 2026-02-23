@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, toRefs, watch } from 'vue'
+import { computed, provide, reactive, ref, toRefs, useSlots, watch } from 'vue'
 
 // stores
 import { useViewerState } from '@/stores/viewerState'
@@ -130,6 +130,9 @@ const panelDefaults: ViewerPanelStateList = viewerPanels.map((panel) => {
 // init viewer state
 const viewerState = useViewerState(viewerStateId.value, panelDefaults)
 viewerState.initPanelStates(panelDefaults)
+
+const slots = useSlots()
+provide('manifestViewerSlots', slots)
 
 // Watch manifestId and load manifest when it changes
 watch(manifestId, (newManifestId) => {
