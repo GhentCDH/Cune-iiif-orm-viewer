@@ -19,16 +19,20 @@ export const useAnnotationHelper = (vault: Vault) => {
                 // walk annotations
                 const annotationPage = await vault.loadObject<AnnotationPage>(annotationPageRef.id)
                 if (annotationPage && 'items' in annotationPage && Array.isArray(annotationPage.items)) {
-                    for (const annotationRef of annotationPage.items) {
-                        const annotation = vault.getObject(annotationRef) as Annotation
-                        const targets = ensureArray(annotation.target)
-                        const matchingTargets = getMatchingTargets(canvasId, targets)
-                        if (matchingTargets.length === 0) {
-                            console.warn(`Annotation ${annotationRef.id} does not target canvas ${canvasId}, skipping.`)
-                            continue
-                        }
-                        // add annotation id to list
-                        annotations.push(annotation)
+                    const items = annotationPage.items as Annotation[]
+                    for (const annotation of items) {
+                      // const annotation = vault.getObject<Annotation>(annotationRef.id)
+                      // console.log(annotationRef, annotation)
+                      const targets = ensureArray(annotation.target)
+                      const matchingTargets = getMatchingTargets(canvasId, targets)
+                      if (matchingTargets.length === 0) {
+                        console.warn(
+                          `Annotation ${annotation.id} does not target canvas ${canvasId}, skipping.`
+                        )
+                        continue
+                      }
+                      // add annotation id to list
+                      annotations.push(annotation)
                     }
                 }
             }
