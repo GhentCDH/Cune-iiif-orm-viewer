@@ -15,29 +15,43 @@
       :verbose="viewerState.verbose"
       v-slot="slotProps"
     >
-      <div aria-label="Zoom controls" class="absolute flex left-3 bottom-3 z-50 gap-2">
-        <ViewerButton icon="pi pi-home" aria-label="Search" @click="slotProps.goHome()" />
-        <ViewerButton icon="pi pi-search-plus" aria-label="Zoom in" @click="slotProps.zoomIn()" />
+      <div aria-label="Viewport controls" class="absolute flex left-3 bottom-3 z-50 gap-2">
+        <ViewerButton
+          icon="pi pi-home"
+          aria-label="Home"
+          title="Home"
+          @click="slotProps.goHome()"
+        />
+        <ViewerButton
+          icon="pi pi-search-plus"
+          aria-label="Zoom in"
+          title="Zoom in"
+          @click="slotProps.zoomIn()"
+        />
         <ViewerButton
           icon="pi pi-search-minus"
           aria-label="Zoom out"
+          title="Zoom out"
           @click="slotProps.zoomOut()"
         />
         <ViewerButton
           icon="ci ci-rotate-left"
           aria-label="Zoom out"
           @click="slotProps.rotateLeft()"
+          title="Rotate left"
         />
         <ViewerButton
           icon="ci ci-rotate-right"
           aria-label="Zoom out"
           @click="slotProps.rotateRight()"
+          title="Rotate right"
         />
       </div>
-      <div aria-label="Viewer toggles" class="absolute flex left-3 top-3 z-50 gap-2">
+      <div aria-label="Annotation toggles" class="absolute flex left-3 top-3 z-50 gap-2">
         <ViewerToggleIcon
           v-model="viewerState.showAnnotations"
           aria-label="Toggle annotation visibility"
+          title="Toggle annotation visibility"
           onIcon="ci ci-polygon"
           offIcon="ci ci-polygon"
         />
@@ -50,11 +64,9 @@
 import { useViewerState } from '@/stores/viewerState'
 import ViewerToggleIcon from '@/components/ManifestViewer/panels/image/ui/ViewerToggleIcon.vue'
 import ViewerButton from '@/components/ManifestViewer/panels/image/ui/ViewerButton.vue'
-import {
-  ImageViewer,
-} from '@/components/ImageViewer'
+import { ImageViewer } from '@/components/ImageViewer'
 import { onMounted, ref, watch } from 'vue'
-import type { ViewerPanelProps } from '@/components/ManifestViewer/panels/ViewerPanel.vue'
+import type { ViewerPanelProps } from '@/components/ManifestViewer/ui/ViewerPanel.vue'
 import type { TiledImageOptions } from 'openseadragon'
 import { useVault } from '@/lib/useVault.ts'
 import { useImageHelper } from '@/lib/useImageHelper.ts'
@@ -100,7 +112,8 @@ const initPanel = () => {
 }
 
 // watch canvasId to re-initialize panel when canvas changes
-watch(() => viewerState.images,
+watch(
+  () => viewerState.images,
   (images, previous) => {
     // re-initialize panel
     initPanel()

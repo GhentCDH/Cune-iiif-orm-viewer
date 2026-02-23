@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { watch, onMounted } from 'vue'
 import Button from 'primevue/button'
-import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/panels/ViewerPanel.vue'
+import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/ui/ViewerPanel.vue'
 import { LayerPreset, useViewerState } from '@/stores/viewerState'
 import Layers from '@/components/ManifestViewer/panels/layers/Layers.vue'
 

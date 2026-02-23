@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import ViewerPanel, {
   type ViewerPanelProps
-} from '@/components/ManifestViewer/panels/ViewerPanel.vue'
+} from '@/components/ManifestViewer/ui/ViewerPanel.vue'
 import { useViewerState } from '@/stores/viewerState'
 import { useNamedEntityStore } from '@/stores/namedEntityStore'
 
