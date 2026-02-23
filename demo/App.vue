@@ -4,7 +4,7 @@ import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 
 // import child components
-import { ManifestViewer as Viewer } from '../src/index';
+import { ManifestViewer } from '../src/index'
 import Menubar from 'primevue/menubar'
 
 const verbose = ref(false)
@@ -18,7 +18,7 @@ const exampleManifests = [
   'https://iiif.ghentcdh.ugent.be/iiif/manifests/cune-iiif-orm:sde:O.0219/manifest.json',
   'https://iiif.ghentcdh.ugent.be/iiif/manifests/cune-iiif-orm:sde:O.0220/manifest.json',
   'https://iiif.ghentcdh.ugent.be/iiif/manifests/cune-iiif-orm:sde:O.0221/manifest.json',
-  'https://iiif.ghentcdh.ugent.be/iiif/manifests/cune-iiif-orm:sde:BTT13/manifest.json',
+  'https://iiif.ghentcdh.ugent.be/iiif/manifests/cune-iiif-orm:sde:BTT13/manifest.json'
 ]
 
 // Read manifestId from URL parameter on mount
@@ -71,7 +71,9 @@ const resetManifest = () => {
     <div v-if="!manifestId" class="flex-1 flex items-center justify-center bg-gray-50">
       <div class="w-full max-w-2xl p-8 bg-white rounded-lg shadow-lg">
         <h1 class="text-2xl font-bold mb-2 text-gray-800">Cune-iiif-orm IIIF Manifest Viewer</h1>
-        <p class="text-gray-600 mb-6">Enter a Cune-iiif-orm IIIF Manifest URL to view the content</p>
+        <p class="text-gray-600 mb-6">
+          Enter a Cune-iiif-orm IIIF Manifest URL to view the content
+        </p>
 
         <form @submit.prevent="loadManifest" class="flex flex-col gap-4">
           <div class="flex flex-col gap-2">
@@ -141,13 +143,14 @@ const resetManifest = () => {
           />
         </template>
       </Menubar>
-      <Viewer
+      <ManifestViewer
         :verbose="verbose"
         :manifest-id="manifestId"
         :viewer-state-id="undefined"
         class="flex-1"
         v-if="manifestId"
-      />
+      >
+      </ManifestViewer>
     </template>
   </section>
 </template>
