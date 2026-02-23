@@ -2,7 +2,7 @@
   <div class="panel__layers">
     <div v-for="(layer, index) in layers" :key="layer.id" class="layer flex py-2 border-b">
       <div class="layer_image">
-        <img :src="layer.thumbnail" class="h-12" />
+        <img :src="layer.thumbnail" class="h-12" :alt="layer.label" :title="layer.label">
       </div>
       <div class="layer_content px-2 flex-1">
         <div class="flex gap-2 items-center">
@@ -11,9 +11,7 @@
             v-model="layer.enabled"
             onIcon="pi pi-eye"
             offIcon="pi pi-eye-slash"
-            offLabel=""
-            onLabel=""
-            class=""
+            title="Toggle layer visibility"
           ></ToggleIcon>
         </div>
         <div class="p-2 mt-2">

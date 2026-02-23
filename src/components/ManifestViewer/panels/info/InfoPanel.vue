@@ -8,7 +8,7 @@
 import { computed } from 'vue'
 import { useViewerState } from '@/stores/viewerState'
 
-import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/panels/ViewerPanel.vue'
+import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/ui/ViewerPanel.vue'
 import Metadata from '@/components/ManifestViewer/panels/info/Metadata.vue'
 
 const props = defineProps<ViewerPanelProps>()

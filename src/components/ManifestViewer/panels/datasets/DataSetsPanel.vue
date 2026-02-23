@@ -23,7 +23,7 @@ import { useVault } from '@/lib/useVault.ts'
 
 import ViewerPanel, {
   type ViewerPanelProps
-} from '@/components/ManifestViewer/panels/ViewerPanel.vue'
+} from '@/components/ManifestViewer/ui/ViewerPanel.vue'
 import { getLocalizedValue } from '@/lib/LocalizationHelper.ts'
 
 const props = defineProps<ViewerPanelProps>()

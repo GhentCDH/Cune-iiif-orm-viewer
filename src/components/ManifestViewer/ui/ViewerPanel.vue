@@ -12,7 +12,7 @@ import Panel from 'primevue/panel'
 import ScrollPanel from 'primevue/scrollpanel'
 import Button from 'primevue/button'
 import { toRefs } from 'vue'
-import { useViewerState } from '@/stores/viewerState'
+import { useViewerState } from '@/stores/viewerState.ts'
 
 // props
 const props = withDefaults(defineProps<ViewerPanelProps>(), {
