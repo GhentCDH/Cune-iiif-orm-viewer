@@ -46,6 +46,12 @@
           @click="slotProps.rotateRight()"
           title="Rotate right"
         />
+        <ViewerSlot
+          name="image-controls-bottom"
+          :slot-props="{ zoomIn: slotProps.zoomIn, zoomOut: slotProps.zoomOut,
+                         goHome: slotProps.goHome, rotateLeft: slotProps.rotateLeft,
+                         rotateRight: slotProps.rotateRight, osd: slotProps.osd }"
+        />
       </div>
       <div aria-label="Annotation toggles" class="absolute flex left-3 top-3 z-50 gap-2">
         <ViewerToggleIcon
@@ -55,6 +61,12 @@
           onIcon="ci ci-polygon"
           offIcon="ci ci-polygon"
         />
+        <ViewerSlot
+          name="image-controls-top"
+          :slot-props="{ zoomIn: slotProps.zoomIn, zoomOut: slotProps.zoomOut,
+                         goHome: slotProps.goHome, rotateLeft: slotProps.rotateLeft,
+                         rotateRight: slotProps.rotateRight, osd: slotProps.osd }"
+        />
       </div>
     </ImageViewer>
   </div>
@@ -62,6 +74,7 @@
 
 <script setup lang="ts">
 import { useViewerState } from '@/stores/viewerState'
+import ViewerSlot from '@/components/ManifestViewer/ui/ViewerSlot'
 import ViewerToggleIcon from '@/components/ManifestViewer/panels/image/ui/ViewerToggleIcon.vue'
 import ViewerButton from '@/components/ManifestViewer/panels/image/ui/ViewerButton.vue'
 import { ImageViewer } from '@/components/ImageViewer'

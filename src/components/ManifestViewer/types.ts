@@ -35,3 +35,17 @@ export interface ViewerPanelState {
 }
 
 export type ViewerPanelStateList = Array<ViewerPanelState>
+
+export interface ImageControlsScope {
+  zoomIn: () => void
+  zoomOut: () => void
+  goHome: () => void
+  rotateLeft: () => void
+  rotateRight: () => void
+  osd: any
+}
+
+export type ManifestViewerSlots = {
+  'image-controls-bottom'?: (scope: ImageControlsScope) => any
+  'image-controls-top'?: (scope: ImageControlsScope) => any
+}
