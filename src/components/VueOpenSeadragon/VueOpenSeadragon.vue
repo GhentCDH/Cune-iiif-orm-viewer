@@ -181,6 +181,8 @@ const initViewer = () => {
   }
 
   // Initialize Annotorious
+  // todo: fix type error
+  // @ts-ignore
   annotorious = createOSDAnnotator(osd, {
     drawingEnabled: false,
     userSelectAction: UserSelectAction.SELECT,
