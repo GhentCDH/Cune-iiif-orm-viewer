@@ -16,31 +16,31 @@
       v-slot="slotProps"
     >
       <div aria-label="Viewport controls" class="absolute flex left-3 bottom-3 z-50 gap-2">
-        <ViewerButton
+        <ImageViewerButton
           icon="pi pi-home"
           aria-label="Home"
           title="Home"
           @click="slotProps.goHome()"
         />
-        <ViewerButton
+        <ImageViewerButton
           icon="pi pi-search-plus"
           aria-label="Zoom in"
           title="Zoom in"
           @click="slotProps.zoomIn()"
         />
-        <ViewerButton
+        <ImageViewerButton
           icon="pi pi-search-minus"
           aria-label="Zoom out"
           title="Zoom out"
           @click="slotProps.zoomOut()"
         />
-        <ViewerButton
+        <ImageViewerButton
           icon="ci ci-rotate-left"
           aria-label="Zoom out"
           @click="slotProps.rotateLeft()"
           title="Rotate left"
         />
-        <ViewerButton
+        <ImageViewerButton
           icon="ci ci-rotate-right"
           aria-label="Zoom out"
           @click="slotProps.rotateRight()"
@@ -54,7 +54,7 @@
         />
       </div>
       <div aria-label="Annotation toggles" class="absolute flex left-3 top-3 z-50 gap-2">
-        <ViewerToggleIcon
+        <ImageViewerToggle
           v-model="viewerState.showAnnotations"
           aria-label="Toggle annotation visibility"
           title="Toggle annotation visibility"
@@ -75,8 +75,8 @@
 <script setup lang="ts">
 import { useViewerState } from '@/stores/viewerState'
 import ViewerSlot from '@/components/ManifestViewer/ui/ViewerSlot'
-import ViewerToggleIcon from '@/components/ManifestViewer/panels/image/ui/ViewerToggleIcon.vue'
-import ViewerButton from '@/components/ManifestViewer/panels/image/ui/ViewerButton.vue'
+import ImageViewerToggle from '@/components/ManifestViewer/panels/image/ui/ImageViewerToggle.vue'
+import ImageViewerButton from '@/components/ManifestViewer/panels/image/ui/ImageViewerButton.vue'
 import { ImageViewer } from '@/components/ImageViewer'
 import { onMounted, ref, watch } from 'vue'
 import type { ViewerPanelProps } from '@/components/ManifestViewer/ui/ViewerPanel.vue'
