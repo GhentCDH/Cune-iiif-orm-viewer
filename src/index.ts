@@ -1,7 +1,7 @@
 import './assets/style.scss'
 
 // Components
-export { ManifestViewer } from './components/ManifestViewer/index'
+export { ManifestViewer } from './components/ManifestViewer'
 
 // Stores
 export { useViewerState } from './stores/viewerState'
