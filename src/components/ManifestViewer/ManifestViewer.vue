@@ -59,8 +59,8 @@ let viewerPanels: Array<ViewerPanel> = [
     maxWidth: 300
   },
   {
-    id: 'tablet',
-    label: 'Tablet',
+    id: 'image',
+    label: 'Image',
     icon: 'ci ci-cuneiform ci-md',
     component: ImagePanel,
     visible: true,
