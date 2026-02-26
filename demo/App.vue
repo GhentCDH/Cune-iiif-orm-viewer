@@ -122,7 +122,7 @@ const resetManifest = () => {
 
     <!-- Show viewer when manifestId is loaded -->
     <template v-else>
-      <Menubar :model="menuBarItems" class="bg-green-700">
+      <Menubar :model="menuBarItems" class="">
         <template #start>
           <h3>Cune-iiif-orm IIIF Viewer</h3>
         </template>
@@ -138,7 +138,7 @@ const resetManifest = () => {
             label="Change Manifest"
             severity="secondary"
             size="small"
-            class="absolute right-2 z-50"
+            class="right-2"
             @click="resetManifest"
           />
         </template>

@@ -6,7 +6,9 @@
 import ToggleButton from 'primevue/togglebutton';
 </script>
 
-<style lang="scss">
+<style>
+@reference "tailwindcss";
+
 .toggle-icon {
   @apply border-none p-0;
 }

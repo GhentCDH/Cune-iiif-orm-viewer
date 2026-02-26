@@ -1,3 +1,4 @@
+import './assets/tailwind.css'
 import './assets/main.scss'
 import '../src/assets/style.scss'
 
@@ -24,7 +25,7 @@ app.use(PrimeVue, {
       darkModeSelector: '.dark',
       cssLayer: {
         name: 'primevue',
-        order: 'tailwind-base, primeui, tailwind-utilities'
+        order: 'theme, base, primevue, utilities'
       }
     }
   }

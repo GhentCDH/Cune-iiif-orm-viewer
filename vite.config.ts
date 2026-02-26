@@ -55,7 +55,6 @@ export default defineConfig({
         '@annotorious/annotorious',
         '@annotorious/openseadragon',
         'cune-iiif-orm-atf-utils',
-        'tailwindcss-primeui',
       ],
     },
   },

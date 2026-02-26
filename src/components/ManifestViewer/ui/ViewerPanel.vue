@@ -30,11 +30,11 @@ const container = scrollable.value ? ScrollPanel : 'div'
 </script>
 
 <template>
-  <div class="viewer-panel w-full h-full">
+  <div class="viewer-panel border-0 w-full h-full">
     <component :is="container" class="w-full h-full">
-      <Panel class="h-full">
+      <Panel class="h-full border-none">
         <template #header>
-          <span class="text-md font-semibold">{{ title }}</span>
+          <span class="text-base font-semibold">{{ title }}</span>
         </template>
         <template #icons>
           <Button v-if="$slots.options" icon="pi pi-ellipsis-v" small text rounded size="small" @click="viewerState.togglePanelOptionsVisibility(panelId)"></Button>
@@ -54,14 +54,17 @@ const container = scrollable.value ? ScrollPanel : 'div'
 
 
 
-<style lang="scss">
+<style>
+@reference "tailwindcss";
+
 .viewer-panel {
   .p-panel, .p-scrollpanel {
     @apply border-none;
   }
 
   .p-panel-header {
-    @apply sticky top-0 bg-surface-0 items-baseline;
+    @apply sticky top-0 items-baseline;
+    background-color: var(--p-surface-0);
   }
 
   .viewer-panel__options {
