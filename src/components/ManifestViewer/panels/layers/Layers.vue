@@ -1,6 +1,6 @@
 <template>
   <div class="panel__layers">
-    <div v-for="(layer, index) in layers" :key="layer.id" class="layer flex py-2 border-b">
+    <div v-for="(layer, index) in layers" :key="layer.id" class="layer flex py-2 border-b border-gray-200">
       <div class="layer_image">
         <img :src="layer.thumbnail" class="h-12" :alt="layer.label" :title="layer.label">
       </div>

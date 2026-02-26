@@ -1,5 +1,5 @@
 <template>
-    <span class="font-semibold text-md">
+    <span class="font-semibold text-base">
         <slot>Default Heading</slot>
     </span>
 </template>

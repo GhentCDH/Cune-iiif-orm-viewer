@@ -147,7 +147,7 @@ watch(manifestId, (newManifestId) => {
 
 <template>
   <div class="cune-iiif-orm-viewer flex overflow-hidden" v-if="viewerState.manifestLoaded">
-    <div class="flex px-1.5 pt-4 pb-2 min-h-full max-h-full flex-col gap-2 bg-gray-100">
+    <div class="flex px-1.5 pt-4 pb-2 min-h-full max-h-full flex-col gap-2 ">
       <SidebarToggle
         v-for="panel in viewerPanels"
         :key="panel.id"

@@ -10,7 +10,9 @@ const props = defineProps({
 })
 </script>
 
-<style lang="scss">
+<style>
+@reference "tailwindcss";
+
 .sidebar__button {
   @apply w-auto p-1.5;
 
