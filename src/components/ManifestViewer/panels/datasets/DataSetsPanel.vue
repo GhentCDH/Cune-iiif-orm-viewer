@@ -2,13 +2,13 @@
   <ViewerPanel v-bind="props" scrollable>
     <h2>Images</h2>
     <ul class="list-inside list-disc mb-2">
-      <li v-for="(resource, index) in formatImageResources" :key="index">
+      <li v-for="resource in formatImageResources" :key="resource.uri">
         <a target="_blank" :href="resource.uri">{{ resource.label }}</a>
       </li>
     </ul>
     <h2>Data</h2>
     <ul class="list-inside list-disc mb-2">
-      <li v-for="(resource, index) in formatSeeAlso" :key="index">
+      <li v-for="resource in formatSeeAlso" :key="resource.uri">
         <a target="_blank" :href="resource.uri">{{ resource.label }}</a>
       </li>
     </ul>

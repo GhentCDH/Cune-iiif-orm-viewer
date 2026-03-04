@@ -53,6 +53,21 @@ const osdContainer = ref<HTMLElement>()
 let osd: OpenSeaDragonViewer | null = null
 let annotorious: OpenSeadragonAnnotator<ImageAnnotation, W3CImageAnnotation> | null = null
 
+// Track OSD handler function references so they can be removed before re-init
+const osdHandlerRegistry: Array<{ event: string; fn: Function }> = []
+
+function addOsdHandler(event: string, fn: Function) {
+  osd!.addHandler(event as any, fn as any)
+  osdHandlerRegistry.push({ event, fn })
+}
+
+function clearOsdHandlers() {
+  for (const { event, fn } of osdHandlerRegistry) {
+    osd?.removeHandler(event as any, fn as any)
+  }
+  osdHandlerRegistry.length = 0
+}
+
 // annotation hover control
 const hoveredAnnotationIds = new Map()
 
@@ -139,6 +154,13 @@ watch(tileSources,
 
 /* init viewer */
 const initViewer = () => {
+  // Clean up any previous instance before re-initialising (defensive)
+  clearOsdHandlers()
+  if (annotorious) {
+    annotorious.destroy()
+    annotorious = null
+  }
+
   // Initialize VueOpenSeadragon
   const osdConfig: OpenSeadragonOptions = {
     degrees: rotation.value ?? 0,
@@ -155,16 +177,16 @@ const initViewer = () => {
 
   verbose.value && console.log("Init OSD")
 
-  // Add event listeners
-  osd.addHandler('zoom', (event: ZoomEvent): void => {
+  // Add event listeners (tracked so they can be removed on cleanup)
+  addOsdHandler('zoom', (event: ZoomEvent): void => {
     verbose.value && console.log('* osd: emit zoom event ', event)
     emit('zoom', event)
   })
-  osd.addHandler('pan', (event: PanEvent) => {
+  addOsdHandler('pan', (event: PanEvent) => {
     verbose.value && console.log('* osd: emit pan event', event)
     emit('pan', event)
   })
-  osd.addHandler('rotate', (event: RotateEvent) => {
+  addOsdHandler('rotate', (event: RotateEvent) => {
     verbose.value && console.log('* osd: emit rotate event', event)
     emit('rotate', event)
   })
@@ -229,6 +251,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   verbose.value && console.log('Destroy OSD and Annotorious')
+  clearOsdHandlers()
   if (annotorious) {
     annotorious.destroy()
     annotorious = null

@@ -3,7 +3,7 @@
     <div class="mb-2" v-for="(entry, entryKey) in localizedMetadata" :key="entryKey">
       <div class="metadata__label">
         <Label>
-          <span v-for="(label, labelIndex) in entry.label" :key="labelIndex">{{ label }}</span>
+          <span v-for="(label, labelIndex) in entry.label" :key="`${entryKey}-${labelIndex}`">{{ label }}</span>
         </Label>
       </div>
       <div class="metadata__value">

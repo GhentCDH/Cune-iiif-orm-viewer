@@ -10,8 +10,8 @@
     </template>
     <ATFTokenizer
       v-for="(transliteration, index) in transliterations"
-      :key="index"
-      :atf="fixNewlines(transliteration)"
+      :key="transliteration.id"
+      :atf="fixNewlines(transliteration.text)"
       :hoveredSignSelectors="hoveredATFSigns"
       :_entities="namedEntityStore.namedEntities"
       :level="viewerState.atfLevel"
@@ -23,9 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import ViewerPanel, {
-  type ViewerPanelProps
-} from '@/components/ManifestViewer/ui/ViewerPanel.vue'
+import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/ui/ViewerPanel.vue'
 import { useViewerState } from '@/stores/viewerState'
 import { useNamedEntityStore } from '@/stores/namedEntityStore'
 
@@ -46,6 +44,11 @@ type AnnotationBody = {
   purpose?: string
 }
 
+type TransliterationItem = {
+  id: string
+  text: string
+}
+
 // props
 const props = defineProps<ViewerPanelProps>()
 
@@ -56,38 +59,23 @@ const viewerState = useViewerState(props.viewerStateId)
 const namedEntityStore = useNamedEntityStore()
 
 // computed
-const transliterations = computed((): Array<string> => {
-  if (!viewerState.hasAnnotations) {
-    return []
-  }
-  const ret: string[] = []
-  viewerState.annotations
-    .filter((a: any) => {
-      const body = ensureArray(a.body) as AnnotationBody[]
-      return (
-        Array.isArray(a.motivation) &&
-        a.motivation.includes('describing') &&
-        (body as any[]).some(
-          (b: any) =>
-            b.purpose === 'transliterating' && b.format === 'text/x-atf' && b.type === 'TextualBody'
-        )
-      )
-    })
-    .forEach((a: any) => {
-      const body = (ensureArray(a.body) as AnnotationBody[]).find(
-        (b) =>
-          'purpose' in b &&
-          b.purpose === 'transliterating' &&
-          'format' in b &&
-          b.format === 'text/x-atf' &&
-          'type' in b &&
-          b.type === 'TextualBody'
-      )
-      if (body && 'value' in body) {
-        ret.push(body.value as string)
-      }
-    })
-  return ret
+const transliterations = computed((): TransliterationItem[] => {
+  if (!viewerState.hasAnnotations) return []
+
+  return viewerState.annotations.reduce((acc, a) => {
+    if (!Array.isArray(a.motivation) || !a.motivation.includes('describing')) return acc
+
+    const body = ensureArray(a.body).find(
+      (b: any) =>
+        b.purpose === 'transliterating' && b.format === 'text/x-atf' && b.type === 'TextualBody'
+    )
+    if (body?.value)
+      acc.push({
+        id: a.id as string,
+        text: body.value as string
+      })
+    return acc
+  }, [] as TransliterationItem[])
 })
 
 const hasTransliterations = computed((): boolean => {

@@ -26,31 +26,17 @@ const props = defineProps<ViewerPanelProps>()
 const viewerState = useViewerState(props.viewerStateId)
 
 const translations = computed((): Array<string> => {
-  if (!viewerState.hasAnnotations) {
-    return []
-  }
-  const ret: Array<string> = []
-  viewerState.annotations
-    .filter((a: any) => {
-      const body = ensureArray(a.body) as AnnotationBody[]
-      return (
-        Array.isArray(a.motivation) &&
-        a.motivation.includes('describing') &&
-        body.some(
-          (b: AnnotationBody) =>
-            b.purpose === 'translating' && b.format === 'text/plain' && b.type === 'TextualBody'
-        )
-      )
-    })
-    .forEach((a: any) => {
-      const body = (ensureArray(a.body) as AnnotationBody[]).find(
-        (b) => b.purpose === 'translating' && b.format === 'text/plain' && b.type === 'TextualBody'
-      )
-      if (body && 'value' in body) {
-        ret.push(body.value as string)
-      }
-    })
-  return ret
+  if (!viewerState.hasAnnotations) return []
+
+  return viewerState.annotations.reduce((acc, a: any) => {
+    if (!Array.isArray(a.motivation) || !a.motivation.includes('describing')) return acc
+
+    const body = (ensureArray(a.body) as AnnotationBody[]).find(
+      (b) => b.purpose === 'translating' && b.format === 'text/plain' && b.type === 'TextualBody'
+    )
+    if (body && 'value' in body) acc.push(body.value as string)
+    return acc
+  }, [] as string[])
 })
 
 const hasTranslations = computed((): boolean => {
