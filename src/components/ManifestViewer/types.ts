@@ -27,6 +27,14 @@ export interface Layer {
   thumbnail?: string
 }
 
+export type LayerState = Pick<Layer, 'opacity' | 'enabled'>
+
+export interface LayerPreset {
+  id: string
+  label: string
+  layerStates: LayerState[]
+}
+
 export interface ViewerPanelState {
   id: string,
   enabled: boolean

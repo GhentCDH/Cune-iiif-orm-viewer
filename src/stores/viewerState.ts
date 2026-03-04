@@ -10,15 +10,10 @@ import type { Canvas, Manifest, Annotation } from '@iiif/presentation-3'
 import { useAnnotationHelper } from '@/lib/useAnnotationHelper.ts'
 import type {
   Layer,
+  LayerPreset,
   ViewerPanelState,
   ViewerPanelStateList
 } from '@/components/ManifestViewer/types'
-
-export enum LayerPreset {
-  Color = 'color',
-  Sketch = 'sketch',
-  Combined = 'combined'
-}
 
 type ViewerPanelStateMap = { [key: string]: ViewerPanelState }
 
@@ -67,7 +62,7 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
   const atfLevel = ref('sign')
 
   const layers: Ref<Layer[]> = ref([])
-  const layerPreset = ref<String>(LayerPreset.Combined)
+  const layerPreset = ref<LayerPreset|null>(null)
 
   const hoveredAnnotationIds = ref<string[]>([])
   const selectedAnnotationIds = ref<string[]>([])
@@ -112,7 +107,6 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
       }
     }
     layers.value = newLayers
-    layerPreset.value = LayerPreset.Combined
   })
 
   const canvas: ComputedRef<Canvas | null> = computed(() => {
@@ -207,10 +201,10 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
   }
 
   // layer actions
-  function setLayers(l: Layer[]) {
+  function setLayers(newLayers: Layer[]) {
     const applyPreset = layers.value.length === 0
-    layers.value = l
-    if (applyPreset) {
+    layers.value = newLayers
+    if (applyPreset && layerPreset.value) {
       setLayerPreset(layerPreset.value as LayerPreset)
     }
   }
@@ -236,34 +230,11 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
       return l
     })
 
-    if (preset === LayerPreset.Color) {
-      const index = newLayers.findIndex((l) => l.label === 'Color B')
-      if (index !== -1) {
+    for (const layerState of preset.layerStates) {
+      const index = newLayers.findIndex((l) => l.id === layerState.id)
+      if (index !== -1 && !!newLayers[index]) {
         newLayers[index].enabled = true
-        newLayers[index].opacity = 1
-      }
-    }
-
-    if (preset === LayerPreset.Sketch) {
-      const index = newLayers.findIndex((l) => l.label === 'Sketch Hard')
-      if (index !== -1) {
-        newLayers[index].enabled = true
-        newLayers[index].opacity = 1
-      }
-    }
-
-    if (preset === LayerPreset.Combined) {
-      let index
-      index = newLayers.findIndex((l) => l.label === 'Color B')
-      if (index !== -1) {
-        newLayers[index].enabled = true
-        newLayers[index].opacity = 1
-      }
-
-      index = newLayers.findIndex((l) => l.label === 'Sketch Hard')
-      if (index !== -1) {
-        newLayers[index].enabled = true
-        newLayers[index].opacity = 0.2
+        newLayers[index].opacity = layerState.opacity
       }
     }
 
@@ -272,14 +243,14 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
 
   function updateLayerOpacity(layerId: string, opacity: number) {
     const index = layers.value.findIndex((l) => l.id === layerId)
-    if (index !== -1) {
+    if (index !== -1 && !!layers.value[index]) {
       layers.value[index].opacity = opacity
     }
   }
 
   function updateLayerVisibility(layerId: string, enabled: boolean) {
     const index = layers.value.findIndex((l) => l.id === layerId)
-    if (index !== -1) {
+    if (index !== -1 && !!layers.value[index]) {
       layers.value[index].enabled = enabled
     }
   }
