@@ -93,34 +93,15 @@ const annotationsMap = computed<AnnotationMap>(() => {
 
 const annotationIdSet = new Set<string>()
 
-// watch activeAnnotationIds
-watch(
-  activeAnnotationIds.value, // avoids a deep watch
-  (now: string[], old: string[]) => {
-    verbose.value && console.log('* activeAnnotationIds updated', activeAnnotationIds.value)
-    if (now.length === 0 && old.length === 0) return
-    updateAnnotationStyles([...old, ...now])
-    //
-    // const mergedIds = new Set<string>([...old, ...now])
-    // if (mergedIds.size !== 0) {
-    //   updateAnnotationStyles(Array.from(mergedIds))
-    // }
-  }
-)
-
-// watch activeAnnotationIds
-watch(
-  hoveredAnnotationIds, // avoids a deep watch
-  (now: string[], old: string[]) => {
-    verbose.value && console.log('* hoveredAnnotationIds updated', hoveredAnnotationIds.value)
-    if (now.length === 0 && old.length === 0) return
-    updateAnnotationStyles([...old, ...now])
-    // const mergedIds = new Set<string>([...old, ...now])
-    // if (mergedIds.size !== 0) {
-    //   updateAnnotationStyles(Array.from(mergedIds))
-    // }
-  }
-)
+// Watch both annotation ID arrays together.
+// Previously two separate watchers: the first incorrectly used activeAnnotationIds.value
+// (a snapshot of the array at setup time) instead of the ref, so prop replacements
+// never triggered it. A single watcher on both refs is correct and avoids duplicate
+// updateAnnotationStyles calls when both change in the same tick.
+watch([activeAnnotationIds, hoveredAnnotationIds], () => {
+  verbose.value && console.log('* annotation IDs updated', activeAnnotationIds.value, hoveredAnnotationIds.value)
+  updateAnnotationStyles()
+})
 
 // onMounted
 onMounted(() => {

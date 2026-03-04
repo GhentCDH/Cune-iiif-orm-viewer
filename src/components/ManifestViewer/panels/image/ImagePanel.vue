@@ -48,9 +48,14 @@
         />
         <ViewerSlot
           name="image-controls-bottom"
-          :slot-props="{ zoomIn: slotProps.zoomIn, zoomOut: slotProps.zoomOut,
-                         goHome: slotProps.goHome, rotateLeft: slotProps.rotateLeft,
-                         rotateRight: slotProps.rotateRight, osd: slotProps.osd }"
+          :slot-props="{
+            zoomIn: slotProps.zoomIn,
+            zoomOut: slotProps.zoomOut,
+            goHome: slotProps.goHome,
+            rotateLeft: slotProps.rotateLeft,
+            rotateRight: slotProps.rotateRight,
+            osd: slotProps.osd
+          }"
         />
       </div>
       <div aria-label="Annotation toggles" class="absolute flex left-3 top-3 z-50 gap-2">
@@ -63,9 +68,14 @@
         />
         <ViewerSlot
           name="image-controls-top"
-          :slot-props="{ zoomIn: slotProps.zoomIn, zoomOut: slotProps.zoomOut,
-                         goHome: slotProps.goHome, rotateLeft: slotProps.rotateLeft,
-                         rotateRight: slotProps.rotateRight, osd: slotProps.osd }"
+          :slot-props="{
+            zoomIn: slotProps.zoomIn,
+            zoomOut: slotProps.zoomOut,
+            goHome: slotProps.goHome,
+            rotateLeft: slotProps.rotateLeft,
+            rotateRight: slotProps.rotateRight,
+            osd: slotProps.osd
+          }"
         />
       </div>
     </ImageViewer>
@@ -194,7 +204,7 @@ const generateTileSources = (): TiledImageOptionsWithId[] => {
 
 // watch viewerState.layers to update tileSources opacity
 watch(
-  () => viewerState.layers,
+  () => viewerState.layers.map((l) => ({ id: l.id, enabled: l.enabled, opacity: l.opacity })),
   () => {
     // update tile sources opacity based on layer settings
     tileSources.value.forEach((tileSource: TiledImageOptionsWithId) => {

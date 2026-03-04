@@ -1,4 +1,4 @@
-import { ref, computed, type Ref, type ComputedRef, watch } from 'vue'
+import { ref, shallowRef, computed, type Ref, type ComputedRef, watch } from 'vue'
 import { defineStore } from 'pinia'
 
 import { useVault } from '@/lib/useVault.ts'
@@ -44,7 +44,7 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
   // resource state
   const manifestId = ref<string | null>(null)
   const canvasId = ref<string | null>(null)
-  const manifest: Ref<Manifest|null> = ref(null)
+  const manifest: Ref<Manifest | null> = shallowRef(null)
 
   const manifestLoaded = ref(false)
 
@@ -117,12 +117,11 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
 
   const canvas: ComputedRef<Canvas | null> = computed(() => {
     if (!canvasId.value) return null
-    console.log(vault.getObject(canvasId.value))
     return vault.getObject(canvasId.value) as Canvas
   })
 
   // Annotations - use ref + watch for async loading
-  const annotations = ref<Annotation[]>([])
+  const annotations = shallowRef<Annotation[]>([])
   const annotationsLoading = ref(false)
 
   // Watch canvasId to load annotations
