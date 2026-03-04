@@ -21,8 +21,6 @@ export const useAnnotationHelper = (vault: Vault) => {
                 if (annotationPage && 'items' in annotationPage && Array.isArray(annotationPage.items)) {
                     const items = annotationPage.items as Annotation[]
                     for (const annotation of items) {
-                      // const annotation = vault.getObject<Annotation>(annotationRef.id)
-                      // console.log(annotationRef, annotation)
                       const targets = ensureArray(annotation.target)
                       const matchingTargets = getMatchingTargets(canvasId, targets)
                       if (matchingTargets.length === 0) {
