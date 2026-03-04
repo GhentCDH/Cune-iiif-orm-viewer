@@ -108,10 +108,11 @@ onMounted(() => {
   verbose.value && console.log('* canvas viewer mounted *')
 })
 
-const initEvents = () => {
-  if (!osd.value) return
+let eventsInitialized = false
 
-  if (!annotorious.value) return
+const initEvents = () => {
+  if (eventsInitialized) return
+  if (!osd.value || !annotorious.value) return
 
   annotorious.value.on('clickAnnotation', (anno: ImageAnnotation, e: PointerEvent) => {
     e.stopPropagation()
@@ -125,6 +126,8 @@ const initEvents = () => {
   annotorious.value.on('mouseLeaveAnnotation', (anno: ImageAnnotation) => {
     onAnnotationMouseOut(anno.id)
   })
+
+  eventsInitialized = true
 }
 
 const getAnnotation = (id: string): Annotation => {
