@@ -16,7 +16,7 @@
         </div>
         <div class="p-2 mt-2">
           <Slider
-            v-model="layers[index].opacity"
+            v-model="layer.opacity"
             :min="0"
             :max="1"
             :step="0.01"

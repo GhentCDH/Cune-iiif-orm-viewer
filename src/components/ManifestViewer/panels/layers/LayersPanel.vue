@@ -23,7 +23,7 @@ import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/
 import { useViewerState } from '@/stores/viewerState'
 import Layers from '@/components/ManifestViewer/panels/layers/Layers.vue'
 import { ensureArray } from '@/lib/ArrayHelper.ts'
-import { getLocalizedValue } from '@/lib/LocalizationHelper.ts'
+import { getLocalizedValue, type LocalizedValue } from '@/lib/LocalizationHelper.ts'
 import type { LayerPreset, LayerState } from '@/components/ManifestViewer/types.ts'
 
 type AnnotationBody = {
@@ -46,11 +46,12 @@ const layerPresets = computed((): Array<LayerPreset> => {
     const body = (ensureArray(a.body) as AnnotationBody[]).find(
       (b) => b.format === 'application/json' && b.type === 'LayerPreset'
     )
-    if (body && 'value' in body)
+    if (body && 'value' in body && 'label' in body)
       // Assuming body.value is an array of LayerState objects
       acc.push({
         id: a.id,
-        label: body?.label ? getLocalizedValue(body.label, viewerState.language) : 'Unnamed Preset',
+        label:
+          getLocalizedValue(body.label as LocalizedValue, viewerState.language) || 'Unnamed Preset',
         layerStates: body.value as LayerState[]
       } as LayerPreset)
     return acc
