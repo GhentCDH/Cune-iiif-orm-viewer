@@ -62,10 +62,10 @@ const namedEntityStore = useNamedEntityStore()
 const transliterations = computed((): TransliterationItem[] => {
   if (!viewerState.hasAnnotations) return []
 
-  return viewerState.annotations.reduce((acc, a) => {
+  return viewerState.annotations.reduce((acc: TransliterationItem[], a: Annotation) => {
     if (!Array.isArray(a.motivation) || !a.motivation.includes('describing')) return acc
 
-    const body = ensureArray(a.body).find(
+    const body = ensureArray(a.body as AnnotationBody|AnnotationBody[]).find(
       (b: any) =>
         b.purpose === 'transliterating' && b.format === 'text/x-atf' && b.type === 'TextualBody'
     )

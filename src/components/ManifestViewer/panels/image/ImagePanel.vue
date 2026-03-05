@@ -204,7 +204,7 @@ const generateTileSources = (): TiledImageOptionsWithId[] => {
 
 // watch viewerState.layers to update tileSources opacity
 watch(
-  () => viewerState.layers.map((l) => ({ id: l.id, enabled: l.enabled, opacity: l.opacity })),
+  () => viewerState.layers.map((l: Layer) => ({ id: l.id, enabled: l.enabled, opacity: l.opacity })),
   () => {
     // update tile sources opacity based on layer settings
     tileSources.value.forEach((tileSource: TiledImageOptionsWithId) => {

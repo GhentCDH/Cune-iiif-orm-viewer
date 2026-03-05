@@ -270,6 +270,7 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
         throw new Error('Manifest has no canvases')
       }
 
+      // @ts-ignore
       canvasId.value = canvasIds[0]
       manifestLoaded.value = true
     } catch (e) {

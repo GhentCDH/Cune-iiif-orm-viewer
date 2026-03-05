@@ -104,7 +104,7 @@ export function getFirstLocalizedValue(
     return fallback
   }
 
-  const firstLanguage = languages[0]
+  const firstLanguage = languages[0] as string
   const values = localizedValue[firstLanguage]
 
   if (!values || values.length === 0) {
