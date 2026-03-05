@@ -7,9 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import ViewerPanel, {
-  type ViewerPanelProps
-} from '@/components/ManifestViewer/ui/ViewerPanel.vue'
+import ViewerPanel, { type ViewerPanelProps } from '@/components/ManifestViewer/ui/ViewerPanel.vue'
 import { useViewerState } from '@/stores/viewerState'
 import { computed } from 'vue'
 import { ensureArray } from '@/lib/ArrayHelper'
@@ -28,7 +26,7 @@ const viewerState = useViewerState(props.viewerStateId)
 const translations = computed((): Array<string> => {
   if (!viewerState.hasAnnotations) return []
 
-  return viewerState.annotations.reduce((acc, a: any) => {
+  return viewerState.annotations.reduce((acc: string[], a: any) => {
     if (!Array.isArray(a.motivation) || !a.motivation.includes('describing')) return acc
 
     const body = (ensureArray(a.body) as AnnotationBody[]).find(
