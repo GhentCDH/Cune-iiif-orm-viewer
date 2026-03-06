@@ -8,10 +8,16 @@
       :hovered-annotation-ids="viewerState.hoveredAnnotationIds"
       :annotationStyle="annotationStyle"
       :showAnnotations="viewerState.showAnnotations"
+      :zoom="viewerState.viewPort.zoom"
+      :center="viewerState.viewPort.center"
+      :rotation="viewerState.viewPort.rotation"
       height="1"
       @annotationClick="onAnnotationClick"
       @annotationMouseOver="onAnnotationMouseOver"
       @annotationMouseLeave="onAnnotationMouseLeave"
+      @zoom="onZoom"
+      @pan="onPan"
+      @rotate="onRotate"
       :verbose="viewerState.verbose"
       v-slot="slotProps"
     >
@@ -204,7 +210,8 @@ const generateTileSources = (): TiledImageOptionsWithId[] => {
 
 // watch viewerState.layers to update tileSources opacity
 watch(
-  () => viewerState.layers.map((l: Layer) => ({ id: l.id, enabled: l.enabled, opacity: l.opacity })),
+  () =>
+    viewerState.layers.map((l: Layer) => ({ id: l.id, enabled: l.enabled, opacity: l.opacity })),
   () => {
     // update tile sources opacity based on layer settings
     tileSources.value.forEach((tileSource: TiledImageOptionsWithId) => {
@@ -227,5 +234,20 @@ const onAnnotationMouseOver = (annotationId: string) => {
 const onAnnotationMouseLeave = (annotationId: string) => {
   // verbose.value && console.log('APP: annotation mouse leave', anno, sign)
   viewerState.clearHoveredAnnotationIds()
+}
+
+const onZoom = (zoom: number) => {
+  // verbose.value && console.log('APP: zoom level changed', zoomLevel)
+  viewerState.setZoom(zoom)
+}
+
+const onPan = (center: { x: number; y: number }) => {
+  // verbose.value && console.log('APP: pan position changed', panPosition)
+  viewerState.setCenter(center.x, center.y)
+}
+
+const onRotate = (rotation: number) => {
+  // verbose.value && console.log('APP: rotation changed', rotation)
+  viewerState.setRotation(rotation)
 }
 </script>
