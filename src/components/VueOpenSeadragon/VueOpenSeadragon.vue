@@ -74,18 +74,21 @@ const hoveredAnnotationIds = new Map()
 // watch viewport props (rotation, zoom, pan)
 watchEffect(() => {
   if (rotation.value == null) return
+  if (rotation.value === osd?.viewport.getRotation()) return
   osd?.viewport.setRotation(rotation.value)
 })
 
 watchEffect(() => {
   if (zoom.value == null) return
+  if (zoom.value === osd?.viewport.getZoom()) return
   osd?.viewport.zoomTo(zoom.value)
 })
 
 watchEffect(() => {
   if (pan.value == null) return
-  const point = pan.value instanceof Point ? pan.value : new Point(pan.value[0], pan.value[1])
-  osd?.viewport.panTo(point)
+  if (pan.value.x && pan.value.y) {
+    osd?.viewport.panTo(new Point(pan.value.x, pan.value.y))
+  }
 })
 
 // watch showAnnotations

@@ -211,15 +211,21 @@ export const useViewerState = (storeId?: string, viewerPanelToggleDefaults?: Vie
 
   // viewport state
   function setRotation(rotation: number) {
-    viewPort.value.rotation = rotation
+    if (viewPort.value.rotation !== rotation) {
+      viewPort.value.rotation = rotation
+    }
   }
 
   function setZoom(zoom: number) {
-    viewPort.value.zoom = zoom
+    if (viewPort.value.zoom !== zoom) {
+      viewPort.value.zoom = zoom
+    }
   }
 
   function setCenter(x: number, y: number) {
-    viewPort.value.center = {x, y}
+    if (viewPort.value.center.x !== x && viewPort.value.center.y !== y) {
+      viewPort.value.center = {x, y}
+    }
   }
 
   function setLayerPreset(preset: LayerPreset) {
