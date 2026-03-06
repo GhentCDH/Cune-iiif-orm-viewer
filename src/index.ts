@@ -1,3 +1,4 @@
+import './assets/tailwind.css'
 import './assets/style.scss'
 
 // Components
