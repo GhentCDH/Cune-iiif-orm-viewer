@@ -6,7 +6,7 @@ export interface VueOpenSeadragonProps {
   annotations?: W3CImageAnnotation[]
   rotation?: number
   zoom?: number
-  pan?: [number, number] | OpenSeadragonPoint
+  pan?: Pick<OpenSeadragonPoint, 'x' | 'y' >
   showAnnotations?: boolean
   verbose?: boolean
   annotationStyle?: DrawingStyleExpression

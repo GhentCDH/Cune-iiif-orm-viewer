@@ -26,6 +26,9 @@ const emit = defineEmits<{
   annotationClick: [annotationId: string]
   annotationMouseOver: [annotationId: string]
   annotationMouseLeave: [annotationId: string]
+  zoom: [zoom: number]
+  rotate: [rotation: number]
+  pan: [center: { x: number; y: number }]
 }>()
 
 // props
@@ -57,8 +60,10 @@ const props = withDefaults(defineProps<ImageViewerProps>(), {
   activeAnnotationIds: () => [],
   showAnnotations: true,
   verbose: false,
-  rotation: 0
+  rotation: 0,
 })
+
+const { zoom, center, rotation } = toRefs(props)
 
 // get root element based on ref name
 const osd = ref<OpenSeadragonViewer>()
@@ -237,10 +242,15 @@ const rotateRight = () => {
       :tile-sources="tileSources"
       :annotations="annotations as W3CImageAnnotation[]"
       :rotation="rotation"
+      :zoom="zoom"
+      :pan="center"
       :annotationStyle="annotationStyler"
       :verbose="verbose"
       :showAnnotations="showAnnotations"
       @ready="onReady"
+      @zoom="(v) => emit('zoom', v)"
+      @pan="(v) => emit('pan', v)"
+      @rotate="(v) => emit('rotate', v)"
       @click-annotation="onAnnotationClick"
       @mouse-enter-annotation="onAnnotationMouseOver"
       @mouse-leave-annotation="onAnnotationMouseOut"
