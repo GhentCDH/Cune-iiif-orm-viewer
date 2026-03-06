@@ -107,7 +107,8 @@ watch(annotations, () => {
 })
 
 // watch tile sources
-watch(tileSources,
+watch(
+  tileSources,
   (tileSources, previous) => {
     if (!osd) return
 
@@ -140,7 +141,7 @@ watch(tileSources,
       // add new tile sources
       if (tileSources.length > 0) {
         tileSources.forEach((tileSource) => {
-          osd && osd.addTiledImage({...tileSource})
+          osd && osd.addTiledImage({ ...tileSource })
         })
       }
     }
@@ -178,20 +179,20 @@ const initViewer = () => {
     return
   }
 
-  verbose.value && console.log("Init OSD")
+  verbose.value && console.log('Init OSD')
 
   // Add event listeners (tracked so they can be removed on cleanup)
   addOsdHandler('zoom', (event: ZoomEvent): void => {
     verbose.value && console.log('* osd: emit zoom event ', event)
-    emit('zoom', event)
+    emit('zoom', event.zoom)
   })
   addOsdHandler('pan', (event: PanEvent) => {
     verbose.value && console.log('* osd: emit pan event', event)
-    emit('pan', event)
+    emit('pan', { x: event.center.x, y: event.center.y })
   })
   addOsdHandler('rotate', (event: RotateEvent) => {
     verbose.value && console.log('* osd: emit rotate event', event)
-    emit('rotate', event)
+    emit('rotate', event.degrees)
   })
 
   // Init tilesources
@@ -201,8 +202,9 @@ const initViewer = () => {
 
   // Set initial viewport
   if (pan.value) {
-    const point = pan.value instanceof Point ? pan.value : new Point(pan.value[0], pan.value[1])
-    osd?.viewport.panTo(point)
+    if (pan.value.x && pan.value.y) {
+      osd?.viewport.panTo(new Point(pan.value.x, pan.value.y))
+    }
   }
 
   // Initialize Annotorious
