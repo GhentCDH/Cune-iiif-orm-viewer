@@ -1,6 +1,6 @@
 {
   "name": "@ghentcdh/cune-iiif-orm-viewer",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "type": "module",
   "author": "feissN",
   "description": "A Vue 3 based IIIF viewer for the Cune-iiif-orm project.",
