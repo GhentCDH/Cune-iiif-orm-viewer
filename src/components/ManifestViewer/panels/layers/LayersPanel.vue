@@ -43,16 +43,14 @@ const layerPresets = computed((): Array<LayerPreset> => {
   return viewerState.annotations.reduce((acc: LayerPreset[], a: any) => {
     if (!Array.isArray(a.motivation) || !a.motivation.includes('supplementing')) return acc
 
-    const body = (ensureArray(a.body) as AnnotationBody[]).find(
-      (b) => b.format === 'application/json' && b.type === 'LayerPreset'
-    )
-    if (body && 'value' in body && 'label' in body)
+    const body = (ensureArray(a.body) as AnnotationBody[]).find((b) => b.type === 'LayerPreset')
+    if (body && 'preset' in body && 'label' in body)
       // Assuming body.value is an array of LayerState objects
       acc.push({
         id: a.id,
         label:
           getLocalizedValue(body.label as LocalizedValue, viewerState.language) || 'Unnamed Preset',
-        layerStates: body.value as LayerState[]
+        layerStates: body.preset as LayerState[]
       } as LayerPreset)
     return acc
   }, [] as LayerPreset[])
